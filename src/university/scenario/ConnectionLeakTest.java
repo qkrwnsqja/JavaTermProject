@@ -6,26 +6,26 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * [시나리오 14] Connection Leak 테스트
- *
+ * Connection Leak 테스트
+
  * 목적:
  * - Connection을 제대로 닫지 않으면 어떻게 되는지 검증
  * - Connection Pool이 고갈되는 상황 재현
  * - 메모리 누수 감지
- *
+
  * 왜 중요한가?
  * - 현재 코드는 try-with-resources를 사용하지 않음
  * - 예외 발생 시 Connection이 닫히지 않을 수 있음
  * - 운영 환경에서 점진적으로 Connection이 고갈됨
- *
+
  * 테스트 시나리오:
  * - 50개 스레드 중 10개는 의도적으로 Connection을 닫지 않음
  * - 나머지 40개 + 추가 10개가 정상 작동하는지 확인
- *
+
  * 실행 전 준비:
  * 1. test_setup.sql 실행
  * 2. COURSE_ID를 TEST_LEAK의 open_course_id로 교체
- *
+
  * 예상 결과:
  * - 초반: 정상 작동
  * - 중반: Connection 획득 지연
@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ConnectionLeakTest {
 
-    // ⚠️ 중요: SQL 조회 결과로 실제 ID를 입력하세요
+    // 중요: SQL 조회 결과로 실제 ID를 입력하세요
     private static final int COURSE_ID = 845; // TEST_LEAK의 open_course_id
 
     private static final int TOTAL_THREADS = 500;
@@ -49,7 +49,7 @@ public class ConnectionLeakTest {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("=================================================================");
-        System.out.println("   [시나리오 14] Connection Leak 테스트");
+        System.out.println(" Connection Leak 테스트");
         System.out.println("=================================================================");
         System.out.println("목표: Connection을 닫지 않으면 시스템이 어떻게 되는지 검증");
         System.out.println("-----------------------------------------------------------------");
@@ -114,9 +114,9 @@ public class ConnectionLeakTest {
 
                     conn.commit();
 
-                    // 🔥 핵심: 5번째마다 Connection을 닫지 않음 (의도적 누수)
+                    // 핵심: 5번째마다 Connection을 닫지 않음 (의도적 누수)
                     if (shouldLeak) {
-                        System.err.println("[Thread-" + index + "] ⚠️ Connection을 닫지 않고 종료 (누수!)");
+                        System.err.println("[Thread-" + index + "] Connection을 닫지 않고 종료 (누수!)");
                         leakedConnectionCount.incrementAndGet();
                         // conn.close() 호출 안 함!
                     } else {
@@ -124,19 +124,19 @@ public class ConnectionLeakTest {
                         rs.close();
                         pstmt.close();
                         conn.close();
-                        System.out.println("[Thread-" + index + "] ✅ Connection 정상 반환");
+                        System.out.println("[Thread-" + index + "] Connection 정상 반환");
                     }
 
                 } catch (SQLTimeoutException e) {
                     connectionErrorCount.incrementAndGet();
-                    System.err.println("[Thread-" + index + "] ❌ Connection Timeout!");
+                    System.err.println("[Thread-" + index + "] Connection Timeout!");
                     System.err.println("   → Connection Pool이 고갈되었을 가능성");
                 } catch (SQLException e) {
                     failCount.incrementAndGet();
-                    System.err.println("[Thread-" + index + "] ❌ DB 에러: " + e.getMessage());
+                    System.err.println("[Thread-" + index + "] DB 에러: " + e.getMessage());
                 } catch (Exception e) {
                     failCount.incrementAndGet();
-                    System.err.println("[Thread-" + index + "] ❌ 예외: " + e.getMessage());
+                    System.err.println("[Thread-" + index + "] 예외: " + e.getMessage());
                 } finally {
                     doneLatch.countDown();
                 }
@@ -146,18 +146,18 @@ public class ConnectionLeakTest {
         System.out.println("모든 스레드 준비 완료. 3초 후 시작...\n");
         Thread.sleep(3000);
 
-        System.out.println("▶▶▶ Phase 1 시작! ◀◀◀\n");
+        System.out.println("Phase 1 시작!\n");
         startLatch.countDown();
 
         // Phase 1 완료 대기
         boolean phase1Done = doneLatch.await(30, TimeUnit.SECONDS);
 
         if (!phase1Done) {
-            System.err.println("\n⚠️ Phase 1 타임아웃! 일부 스레드가 여전히 대기 중입니다.");
+            System.err.println("\nPhase 1 일부 스레드가 여전히 대기 중입니다.");
         }
 
         System.out.println("\n-----------------------------------------------------------------");
-        System.out.println("Phase 1 완료. 3초 대기 후 Phase 2 시작...\n");
+        System.out.println("Phase 1 완료. 3초 대기 후 Phase 2 시작\n");
         Thread.sleep(3000);
 
         // Phase 2: 추가로 10개 스레드 실행 (정상 종료)
@@ -178,7 +178,7 @@ public class ConnectionLeakTest {
                     String studentId = "TEST" + String.format("%05d", index + 10);
 
                     long startTime = System.currentTimeMillis();
-                    System.out.println("[Phase2-" + index + "] Connection 요청...");
+                    System.out.println("[Phase2-" + index + "] Connection 요청");
 
                     String url = "jdbc:oracle:thin:@localhost:1521/xe";
                     String user = "c##park2";
@@ -188,7 +188,7 @@ public class ConnectionLeakTest {
                     conn = DriverManager.getConnection(url, user, pass);
 
                     long connectTime = System.currentTimeMillis() - startTime;
-                    System.out.println("[Phase2-" + index + "] ✅ Connection 획득 (" +
+                    System.out.println("[Phase2-" + index + "] Connection 획득 (" +
                             connectTime + "ms)");
 
                     // 간단한 쿼리
@@ -204,10 +204,10 @@ public class ConnectionLeakTest {
 
                 } catch (SQLTimeoutException e) {
                     phase2Fail.incrementAndGet();
-                    System.err.println("[Phase2-" + index + "] ❌ Timeout (Pool 고갈)");
+                    System.err.println("[Phase2-" + index + "] Timeout (Pool 고갈)");
                 } catch (SQLException e) {
                     phase2Fail.incrementAndGet();
-                    System.err.println("[Phase2-" + index + "] ❌ DB 에러: " + e.getMessage());
+                    System.err.println("[Phase2-" + index + "] DB 에러: " + e.getMessage());
                 } finally {
                     phase2Latch.countDown();
                 }
@@ -217,7 +217,7 @@ public class ConnectionLeakTest {
         boolean phase2Done = phase2Latch.await(20, TimeUnit.SECONDS);
 
         if (!phase2Done) {
-            System.err.println("\n⚠️ Phase 2 타임아웃!");
+            System.err.println("\nPhase 2 타임아웃!");
         }
 
         // 최종 결과
@@ -238,22 +238,22 @@ public class ConnectionLeakTest {
         System.out.println("-----------------------------------------------------------------");
 
         if (phase2Fail.get() > 0 || connectionErrorCount.get() > 0) {
-            System.out.println("✅ [PASS] Connection Leak 문제가 감지되었습니다!");
+            System.out.println("[PASS] Connection Leak 문제가 감지되었습니다!");
             System.out.println("   → Phase 2에서 Connection 획득 실패 발생");
             System.out.println("   → 이는 Phase 1에서 닫지 않은 Connection 때문입니다.");
-            System.out.println("\n💡 현재 코드 문제점:");
+            System.out.println("\n현재 코드 문제점:");
             System.out.println("   1. try-with-resources 미사용");
             System.out.println("   2. 예외 발생 시 Connection이 닫히지 않을 수 있음");
             System.out.println("   3. finally 블록에서 null 체크 후 close 필요");
-            System.out.println("\n💡 개선 방법:");
+            System.out.println("\n개선 방법:");
             System.out.println("   // 현재 코드");
             System.out.println("   Connection conn = DriverManager.getConnection(...);");
-            System.out.println("   // 작업...");
+            System.out.println("   // 작업");
             System.out.println("   conn.close(); // 예외 발생 시 실행 안 됨!");
             System.out.println();
             System.out.println("   // 개선안 1: try-with-resources");
             System.out.println("   try (Connection conn = DriverManager.getConnection(...)) {");
-            System.out.println("       // 작업...");
+            System.out.println("       // 작업");
             System.out.println("   } // 자동으로 close()");
             System.out.println();
             System.out.println("   // 개선안 2: finally 블록");
@@ -263,17 +263,17 @@ public class ConnectionLeakTest {
             System.out.println("       if (conn != null) conn.close();");
             System.out.println("   }");
         } else if (phase2Success.get() == 10) {
-            System.out.println("⚠️ [불명확] Phase 2가 모두 성공했습니다.");
+            System.out.println("[불명확] Phase 2가 모두 성공했습니다.");
             System.out.println("   → Connection Pool이 충분히 크거나");
             System.out.println("   → 누수된 Connection이 자동 회수되었을 수 있습니다.");
             System.out.println("   → LEAK_COUNT를 늘려서 재테스트 권장");
         } else {
-            System.out.println("❓ 예상치 못한 결과입니다.");
+            System.out.println("예상치 못한 결과입니다.");
         }
 
         System.out.println("=================================================================\n");
 
-        System.out.println("💡 추가 확인 방법:");
+        System.out.println("추가 확인 방법:");
         System.out.println("   1. Oracle에서 현재 세션 수 확인:");
         System.out.println("      SELECT COUNT(*) FROM v$session WHERE username = 'C##PARK2';");
         System.out.println();

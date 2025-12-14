@@ -17,9 +17,7 @@ public class EnrollmentDAO {
         this.conn = DBConnection.getInstance().getConnection();
     }
 
-    // =========================================================================
-    // 🚀 [New] 성능 최적화된 수강신청 (커넥션 풀 + 비관적 락)
-    // =========================================================================
+    //  수강신청 (커넥션 풀 + 비관적 락)
     public boolean applyCourse(String studentId, int openCourseId) {
         Connection newConn = null;
         PreparedStatement pstmtStudentLock = null;
@@ -108,7 +106,7 @@ public class EnrollmentDAO {
             }
         } finally {
             DBConnection.close(rs, pstmtStudentLock, pstmtCourseLock, pstmtInsert);
-            MiniConnectionPool.releaseConnection(newConn); // ★ 연결 반납
+            MiniConnectionPool.releaseConnection(newConn); // 연결 반납
         }
 
         return isSuccess;
@@ -131,10 +129,7 @@ public class EnrollmentDAO {
         return 0.0;
     }
 
-    // =========================================================================
-    // 🛠️ [Restored] 삭제되었던 기존 메서드 복구 (Service 에러 해결용)
-    // =========================================================================
-
+    // (Service 에러 해결용)
     public boolean isDuplicate(String studentId, int openCourseId) {
         String sql = "SELECT COUNT(*) FROM enrollment WHERE student_id = ? AND open_course_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

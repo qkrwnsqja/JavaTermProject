@@ -113,7 +113,7 @@ public class MainFrame extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         panel.setBackground(new Color(236, 240, 241));
 
-        JLabel statusLabel = new JLabel("✓ 시스템 정상 작동 중");
+        JLabel statusLabel = new JLabel("시스템 정상 작동 중");
         statusLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 
         JLabel dateLabel = new JLabel("2025년 2학기");

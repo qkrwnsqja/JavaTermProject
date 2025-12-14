@@ -39,11 +39,11 @@ public class OpenCourseDAO {
                     openCourse.getIsCanceled() : "N");
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 개설강좌 등록 성공");
+            System.out.println("개설강좌 등록 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 등록 실패: " + e.getMessage());
+            System.err.println("개설강좌 등록 실패: " + e.getMessage());
             return false;
         }
     }
@@ -67,7 +67,7 @@ public class OpenCourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 조회 실패: " + e.getMessage());
+            System.err.println("개설강좌 조회 실패: " + e.getMessage());
         }
         return null;
     }
@@ -94,7 +94,7 @@ public class OpenCourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 목록 조회 실패: " + e.getMessage());
+            System.err.println("개설강좌 목록 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -122,7 +122,7 @@ public class OpenCourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수별 개설강좌 조회 실패: " + e.getMessage());
+            System.err.println("교수별 개설강좌 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -151,7 +151,7 @@ public class OpenCourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 검색 실패: " + e.getMessage());
+            System.err.println("개설강좌 검색 실패: " + e.getMessage());
         }
         return list;
     }
@@ -176,11 +176,11 @@ public class OpenCourseDAO {
             pstmt.setInt(9, openCourse.getOpenCourseId());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 개설강좌 정보 수정 성공");
+            System.out.println("개설강좌 정보 수정 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 정보 수정 실패: " + e.getMessage());
+            System.err.println("개설강좌 정보 수정 실패: " + e.getMessage());
             return false;
         }
     }
@@ -195,11 +195,11 @@ public class OpenCourseDAO {
             pstmt.setInt(1, openCourseId);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 개설강좌 폐강 처리 성공");
+            System.out.println("개설강좌 폐강 처리 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 폐강 처리 실패: " + e.getMessage());
+            System.err.println("개설강좌 폐강 처리 실패: " + e.getMessage());
             return false;
         }
     }
@@ -214,11 +214,11 @@ public class OpenCourseDAO {
             pstmt.setInt(1, openCourseId);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 개설강좌 삭제 성공");
+            System.out.println("개설강좌 삭제 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌 삭제 실패: " + e.getMessage());
+            System.err.println("개설강좌 삭제 실패: " + e.getMessage());
             return false;
         }
     }

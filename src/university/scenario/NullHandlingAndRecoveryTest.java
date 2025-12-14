@@ -6,13 +6,13 @@ import university.model.*;
 import java.sql.*;
 
 /**
- * [시나리오 13] Null 처리 및 예외 복구 테스트
+ * Null 처리 및 예외 복구 테스트
  */
 public class NullHandlingAndRecoveryTest {
 
     public static void main(String[] args) {
         System.out.println("=================================================================");
-        System.out.println("   [시나리오 13] Null 처리 및 예외 복구 테스트");
+        System.out.println(" Null 처리 및 예외 복구 테스트");
         System.out.println("=================================================================");
         System.out.println("목표: Null 안전성 및 예외 처리 검증");
         System.out.println("=================================================================\n");
@@ -36,13 +36,13 @@ public class NullHandlingAndRecoveryTest {
         try {
             boolean success = courseDAO.insert(course);
             if (success) {
-                System.out.println("  ✅ [PASS] NULL 값 정상 처리됨");
+                System.out.println(" [PASS] NULL 값 정상 처리됨");
                 passCount++;
             } else {
-                System.out.println("  ❌ [FAIL] NULL 처리 실패");
+                System.out.println(" [FAIL] NULL 처리 실패");
             }
         } catch (Exception e) {
-            System.out.println("  ❌ [FAIL] 예외 발생: " + e.getMessage());
+            System.out.println(" [FAIL] 예외 발생: " + e.getMessage());
         }
 
         // Test 2: NOT NULL 제약 위반
@@ -59,13 +59,13 @@ public class NullHandlingAndRecoveryTest {
         try {
             boolean success = courseDAO.insert(invalidCourse);
             if (!success) {
-                System.out.println("  ✅ [PASS] NOT NULL 제약 감지됨");
+                System.out.println(" [PASS] NOT NULL 제약 감지됨");
                 passCount++;
             } else {
-                System.out.println("  ❌ [FAIL] NULL이 허용됨!");
+                System.out.println(" [FAIL] NULL이 허용됨!");
             }
         } catch (Exception e) {
-            System.out.println("  ✅ [PASS] 예외로 차단됨");
+            System.out.println(" [PASS] 예외로 차단됨");
             passCount++;
         }
 
@@ -88,7 +88,7 @@ public class NullHandlingAndRecoveryTest {
             // 정상 INSERT
             String sql1 = "INSERT INTO enrollment " +
                     "(enrollment_id, student_id, open_course_id, requested_at, status, created_by) " +
-                    "VALUES (seq_enrollment.NEXTVAL, 'TEST_TX_01', 3, SYSTIMESTAMP, 'APPROVED', 'TEST_TX_01')"; // ★ 3으로 변경!
+                    "VALUES (seq_enrollment.NEXTVAL, 'TEST_TX_01', 3, SYSTIMESTAMP, 'APPROVED', 'TEST_TX_01')";
 
             try (PreparedStatement pstmt = conn.prepareStatement(sql1)) {
                 pstmt.executeUpdate();
@@ -98,7 +98,7 @@ public class NullHandlingAndRecoveryTest {
             // 의도적 에러
             String sql2 = "INSERT INTO enrollment " +
                     "(enrollment_id, student_id, open_course_id, requested_at, status, created_by) " +
-                    "VALUES (seq_enrollment.NEXTVAL, 'NONEXIST999', 3, SYSTIMESTAMP, 'APPROVED', 'NONEXIST999')"; // ★ 3으로 변경!
+                    "VALUES (seq_enrollment.NEXTVAL, 'NONEXIST999', 3, SYSTIMESTAMP, 'APPROVED', 'NONEXIST999')";
 
             try (PreparedStatement pstmt = conn.prepareStatement(sql2)) {
                 pstmt.executeUpdate();
@@ -119,10 +119,10 @@ public class NullHandlingAndRecoveryTest {
             System.out.println("  롤백 후: " + afterCount);
 
             if (beforeCount == afterCount) {
-                System.out.println("\n  ✅ [PASS] 트랜잭션 롤백 성공!");
+                System.out.println("\n [PASS] 트랜잭션 롤백 성공!");
                 passCount++;
             } else {
-                System.out.println("\n  ❌ [FAIL] 일부 데이터가 커밋됨!");
+                System.out.println("\n [FAIL] 일부 데이터가 커밋됨!");
             }
         } finally {
             try { if (conn != null) conn.close(); } catch (Exception e) {}
@@ -139,12 +139,12 @@ public class NullHandlingAndRecoveryTest {
                 Integer year = nullCourse.getRecommendedYear();
 
                 if (year == null) {
-                    System.out.println("  ✅ [PASS] NULL 값 안전하게 처리됨");
+                    System.out.println(" [PASS] NULL 값 안전하게 처리됨");
                     passCount++;
                 }
             }
         } catch (NullPointerException e) {
-            System.out.println("  ❌ [FAIL] NPE 발생!");
+            System.out.println(" [FAIL] NPE 발생!");
         }
 
         // Test 5: Connection 에러 복구
@@ -154,9 +154,9 @@ public class NullHandlingAndRecoveryTest {
         try {
             String badUrl = "jdbc:oracle:thin:@localhost:9999/xe";
             Connection badConn = DriverManager.getConnection(badUrl, "c##park2", "1234");
-            System.out.println("  ❌ [FAIL] 잘못된 연결이 성공함");
+            System.out.println(" [FAIL] 잘못된 연결이 성공함");
         } catch (SQLException e) {
-            System.out.println("  ✅ [PASS] 연결 실패 감지됨");
+            System.out.println(" [PASS] 연결 실패 감지됨");
             passCount++;
         }
 
@@ -184,7 +184,7 @@ public class NullHandlingAndRecoveryTest {
         }
 
         if (connectionClosed) {
-            System.out.println("  ✅ [PASS] 리소스 정리 성공");
+            System.out.println(" [PASS] 리소스 정리 성공");
             passCount++;
         }
 
@@ -198,21 +198,21 @@ public class NullHandlingAndRecoveryTest {
         System.out.println("-----------------------------------------------------------------");
 
         if (passCount == totalTests) {
-            System.out.println("✅ [PASS] 모든 Null 처리 및 예외 복구가 올바릅니다!");
-            System.out.println("\n💡 Null 안전성 체크리스트:");
-            System.out.println("   ✅ NULL 허용 컬럼 처리");
-            System.out.println("   ✅ NOT NULL 제약 검증");
-            System.out.println("   ✅ 트랜잭션 롤백");
-            System.out.println("   ✅ ResultSet NULL 처리");
-            System.out.println("   ✅ Connection 에러 복구");
-            System.out.println("   ✅ 리소스 정리");
+            System.out.println("[PASS] 모든 Null 처리 및 예외 복구가 올바릅니다!");
+            System.out.println("\nNull 안전성 체크리스트:");
+            System.out.println("   NULL 허용 컬럼 처리");
+            System.out.println("   NOT NULL 제약 검증");
+            System.out.println("   트랜잭션 롤백");
+            System.out.println("   ResultSet NULL 처리");
+            System.out.println("   Connection 에러 복구");
+            System.out.println("   리소스 정리");
         } else {
-            System.out.println("❌ [FAIL] 일부 테스트 실패!");
+            System.out.println("[FAIL] 일부 테스트 실패!");
         }
 
         System.out.println("=================================================================\n");
 
-        System.out.println("💡 안전한 코드 패턴:\n");
+        System.out.println("안전한 코드 패턴:\n");
         System.out.println("[패턴 1: try-with-resources]");
         System.out.println("try (Connection conn = getConnection()) {");
         System.out.println("    // 작업");

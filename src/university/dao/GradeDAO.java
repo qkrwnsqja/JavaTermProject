@@ -55,11 +55,11 @@ public class GradeDAO {
             pstmt.setString(8, grade.getConfirmedBy());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 성적 등록 성공");
+            System.out.println("성적 등록 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 성적 등록 실패: " + e.getMessage());
+            System.err.println("성적 등록 실패: " + e.getMessage());
             return false;
         }
     }
@@ -86,7 +86,7 @@ public class GradeDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 성적 조회 실패: " + e.getMessage());
+            System.err.println("성적 조회 실패: " + e.getMessage());
         }
         return null;
     }
@@ -117,7 +117,7 @@ public class GradeDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 학생별 성적 조회 실패: " + e.getMessage());
+            System.err.println("학생별 성적 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -146,7 +146,7 @@ public class GradeDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 개설강좌별 성적 조회 실패: " + e.getMessage());
+            System.err.println("개설강좌별 성적 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -187,18 +187,16 @@ public class GradeDAO {
             pstmt.setInt(8, grade.getGradeId());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 성적 수정 성공");
+            System.out.println("성적 수정 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 성적 수정 실패: " + e.getMessage());
+            System.err.println("성적 수정 실패: " + e.getMessage());
             return false;
         }
     }
 
-    // =====================================================================
-    // ★ [추가] 시나리오 8번 테스트용: 비관적 락(Pessimistic Lock)이 적용된 성적 수정
-    // =====================================================================
+    // 시나리오 8번 테스트용: 비관적 락(Pessimistic Lock)이 적용된 성적 수정
     public boolean updateFinalScoreWithLock(int gradeId, double newScore, String professorId, long thinkingTime) {
         Connection newConn = null; // 스레드별 독립 트랜잭션을 위해 새 연결 사용
         PreparedStatement pstmtLock = null;
@@ -215,7 +213,7 @@ public class GradeDAO {
             // 2. 트랜잭션 시작
             newConn.setAutoCommit(false);
 
-            System.out.println("[" + professorId + "] 성적표 조회 및 수정 시도 (Lock 요청)...");
+            System.out.println("[" + professorId + "] 성적표 조회 및 수정 시도 (Lock 요청)");
 
             // 3. [Locking] 해당 성적 행을 잠금 (FOR UPDATE)
             // -> 이 줄에서 다른 스레드는 락이 풀릴 때까지 멈춰서 기다립니다.
@@ -230,7 +228,7 @@ public class GradeDAO {
 
                 // 4. [Thinking Time] 교수가 점수를 고민하는 시간 (동시성 충돌 유도용 딜레이)
                 if (thinkingTime > 0) {
-                    System.out.println("[" + professorId + "] 점수 입력 중... (" + thinkingTime + "ms 대기)");
+                    System.out.println("[" + professorId + "] 점수 입력 중 (" + thinkingTime + "ms 대기)");
                     try { Thread.sleep(thinkingTime); } catch (InterruptedException e) {}
                 }
 
@@ -263,9 +261,7 @@ public class GradeDAO {
         return isSuccess;
     }
 
-    // =====================================================================
-    // ★ [추가] 테스트 편의를 위해 가장 최근 성적 ID를 가져오는 헬퍼 메서드
-    // =====================================================================
+    // 테스트 편의를 위해 가장 최근 성적 ID를 가져오는 헬퍼 메서드
     public int getLastGradeId() {
         String sql = "SELECT MAX(grade_id) FROM grade";
         try (PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -289,11 +285,11 @@ public class GradeDAO {
             pstmt.setInt(2, gradeId);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 성적 확정 성공");
+            System.out.println("성적 확정 성공");
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 성적 확정 실패: " + e.getMessage());
+            System.err.println("성적 확정 실패: " + e.getMessage());
             return false;
         }
     }
@@ -319,7 +315,7 @@ public class GradeDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 평점 계산 실패: " + e.getMessage());
+            System.err.println("평점 계산 실패: " + e.getMessage());
         }
         return 0.0;
     }

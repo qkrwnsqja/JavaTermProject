@@ -41,11 +41,11 @@ public class ProfessorDAO {
                     new java.sql.Date(professor.getHireDate().getTime()) : null);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 교수 등록 성공: " + professor.getNameKr());
+            System.out.println("교수 등록 성공: " + professor.getNameKr());
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수 등록 실패: " + e.getMessage());
+            System.err.println("교수 등록 실패: " + e.getMessage());
             return false;
         }
     }
@@ -67,7 +67,7 @@ public class ProfessorDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수 조회 실패: " + e.getMessage());
+            System.err.println("교수 조회 실패: " + e.getMessage());
         }
         return null;
     }
@@ -89,7 +89,7 @@ public class ProfessorDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수 목록 조회 실패: " + e.getMessage());
+            System.err.println("교수 목록 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -112,7 +112,7 @@ public class ProfessorDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과별 교수 조회 실패: " + e.getMessage());
+            System.err.println("학과별 교수 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -138,7 +138,7 @@ public class ProfessorDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수 검색 실패: " + e.getMessage());
+            System.err.println("교수 검색 실패: " + e.getMessage());
         }
         return list;
     }
@@ -166,11 +166,11 @@ public class ProfessorDAO {
             pstmt.setString(11, professor.getProfessorId());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 교수 정보 수정 성공: " + professor.getNameKr());
+            System.out.println("교수 정보 수정 성공: " + professor.getNameKr());
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수 정보 수정 실패: " + e.getMessage());
+            System.err.println("교수 정보 수정 실패: " + e.getMessage());
             return false;
         }
     }
@@ -185,11 +185,11 @@ public class ProfessorDAO {
             pstmt.setString(1, professorId);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 교수 삭제 성공: " + professorId);
+            System.out.println("교수 삭제 성공: " + professorId);
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 교수 삭제 실패: " + e.getMessage());
+            System.err.println("교수 삭제 실패: " + e.getMessage());
             return false;
         }
     }

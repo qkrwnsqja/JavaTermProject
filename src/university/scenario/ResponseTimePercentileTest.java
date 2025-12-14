@@ -12,27 +12,27 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * [시나리오 18] 응답 시간 백분위수 측정 테스트
- *
+ * 응답 시간 백분위수 측정 테스트
+
  * 목적:
  * - 대규모 동시 접속 시 응답 시간 분포 측정
  * - P50 (중앙값), P95, P99 백분위수 계산
  * - 성능 SLA 검증
- *
+
  * 성능 목표 (예시):
  * - P50: 100ms 이하
  * - P95: 500ms 이하
  * - P99: 1000ms 이하
- *
+
  * 백분위수란?
  * - P50 (중앙값): 50%의 요청이 이 시간 이내에 완료
  * - P95: 95%의 요청이 이 시간 이내에 완료
  * - P99: 99%의 요청이 이 시간 이내에 완료
- *
+
  * 실행 전 준비:
  * 1. test_setup.sql 실행
  * 2. COURSE_ID 설정 (정원 넉넉한 강좌)
- *
+
  * 예상 결과:
  * - 응답 시간 히스토그램 출력
  * - P50, P95, P99 값 계산
@@ -57,7 +57,7 @@ public class ResponseTimePercentileTest {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("=================================================================");
-        System.out.println("   [시나리오 18] 응답 시간 백분위수 측정 테스트");
+        System.out.println(" 응답 시간 백분위수 측정 테스트");
         System.out.println("=================================================================");
         System.out.println("목표: 대규모 동시 접속 시 성능 SLA 검증");
         System.out.println("-----------------------------------------------------------------");
@@ -84,7 +84,7 @@ public class ResponseTimePercentileTest {
                 try {
                     startLatch.await();
 
-                    // ⏱️ 응답 시간 측정 시작
+                    // 응답 시간 측정 시작
                     long startTime = System.nanoTime();
 
                     boolean success = dao.applyCourse(studentId, COURSE_ID);
@@ -109,10 +109,10 @@ public class ResponseTimePercentileTest {
             });
         }
 
-        System.out.println("500명 준비 완료. 3초 후 동시 접속...\n");
+        System.out.println("500명 준비 완료. 3초 후 동시 접속\n");
         Thread.sleep(3000);
 
-        System.out.println("▶▶▶ 테스트 시작! ◀◀◀\n");
+        System.out.println(" 테스트 시작! \n");
         long testStartTime = System.currentTimeMillis();
         startLatch.countDown();
 
@@ -122,7 +122,7 @@ public class ResponseTimePercentileTest {
                 while (!doneLatch.await(2, java.util.concurrent.TimeUnit.SECONDS)) {
                     int completed = THREAD_COUNT - (int)doneLatch.getCount();
                     int percent = (completed * 100) / THREAD_COUNT;
-                    System.out.println("진행 중... " + completed + "/" + THREAD_COUNT +
+                    System.out.println("진행 중 " + completed + "/" + THREAD_COUNT +
                             " (" + percent + "%)");
                 }
             } catch (InterruptedException e) {
@@ -134,7 +134,7 @@ public class ResponseTimePercentileTest {
         long testEndTime = System.currentTimeMillis();
         executor.shutdown();
 
-        System.out.println("\n테스트 완료! 결과 분석 중...\n");
+        System.out.println("\n테스트 완료! 결과 분석 중\n");
 
         // =====================================================================
         // 응답 시간 분석
@@ -194,22 +194,22 @@ public class ResponseTimePercentileTest {
         boolean p95Pass = p95 <= TARGET_P95;
         boolean p99Pass = p99 <= TARGET_P99;
 
-        System.out.println("  P50: " + (p50Pass ? "✅ PASS" : "❌ FAIL") +
+        System.out.println("  P50: " + (p50Pass ? "PASS" : "FAIL") +
                 " (" + p50 + "ms / 목표: " + TARGET_P50 + "ms)");
-        System.out.println("  P95: " + (p95Pass ? "✅ PASS" : "❌ FAIL") +
+        System.out.println("  P95: " + (p95Pass ? "PASS" : "FAIL") +
                 " (" + p95 + "ms / 목표: " + TARGET_P95 + "ms)");
-        System.out.println("  P99: " + (p99Pass ? "✅ PASS" : "❌ FAIL") +
+        System.out.println("  P99: " + (p99Pass ? "PASS" : "FAIL") +
                 " (" + p99 + "ms / 목표: " + TARGET_P99 + "ms)");
 
         System.out.println("-----------------------------------------------------------------");
 
         if (p50Pass && p95Pass && p99Pass) {
-            System.out.println("✅ [PASS] 모든 SLA를 충족합니다!");
+            System.out.println("[PASS] 모든 SLA를 충족합니다!");
             System.out.println("   시스템이 목표 성능을 달성했습니다.");
         } else {
-            System.out.println("⚠️ [경고] 일부 SLA를 충족하지 못했습니다.");
+            System.out.println("[경고] 일부 SLA를 충족하지 못했습니다.");
             System.out.println("   성능 최적화가 필요합니다.");
-            System.out.println("\n💡 개선 방법:");
+            System.out.println("\n개선 방법:");
             if (!p50Pass) {
                 System.out.println("   - P50 개선: 인덱스 최적화, 쿼리 튜닝");
             }
@@ -224,7 +224,7 @@ public class ResponseTimePercentileTest {
         System.out.println("=================================================================\n");
 
         // 추가 분석
-        System.out.println("💡 백분위수를 사용하는 이유:");
+        System.out.println("백분위수를 사용하는 이유:");
         System.out.println("   - 평균은 이상치(outlier)에 영향을 많이 받음");
         System.out.println("   - P95, P99는 최악의 사용자 경험을 대표");
         System.out.println("   - 실무에서는 평균보다 백분위수로 SLA 정의");

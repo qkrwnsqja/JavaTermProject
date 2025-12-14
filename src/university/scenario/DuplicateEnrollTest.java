@@ -17,7 +17,7 @@ public class DuplicateEnrollTest {
     private static final AtomicInteger failCount = new AtomicInteger(0);
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("=== [시나리오 2] 중복 신청 방어 테스트 ===");
+        System.out.println("=== 중복 신청 방어 테스트 ===");
         System.out.println("학생: " + STUDENT_ID);
         System.out.println("강의: " + TARGET_COURSE_ID);
         System.out.println("시도 횟수: " + ATTEMPTS + "회 (동시 요청)");
@@ -52,7 +52,7 @@ public class DuplicateEnrollTest {
             });
         }
 
-        System.out.println("3초 후 동시 클릭...");
+        System.out.println("3초 후 동시 클릭");
         Thread.sleep(3000);
         startLatch.countDown(); // 시작!
 

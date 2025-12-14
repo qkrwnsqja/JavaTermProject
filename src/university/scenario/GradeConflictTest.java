@@ -5,7 +5,7 @@ import university.dao.GradeDAO;
 public class GradeConflictTest {
 
     public static void main(String[] args) {
-        System.out.println("=== [시나리오 8] 성적 입력 동시성 테스트 (Lost Update 방지) ===");
+        System.out.println("=== 성적 입력 동시성 테스트 (Lost Update 방지) ===");
 
         GradeDAO dao = new GradeDAO();
 
@@ -34,7 +34,7 @@ public class GradeConflictTest {
         Thread threadB = new Thread(() -> {
             try { Thread.sleep(500); } catch (InterruptedException e) {}
 
-            System.out.println(">>> [이교수(PROF002)] 진입 시도! (김교수가 락을 쥐고 있어서 대기해야 정상)");
+            System.out.println(" [이교수(PROF002)] 진입 시도! (김교수가 락을 쥐고 있어서 대기해야 정상)");
 
             // "이교수(B)" -> 실제 ID "PROF002"로 변경
             dao.updateFinalScoreWithLock(targetGradeId, 80.0, "PROF002", 0);

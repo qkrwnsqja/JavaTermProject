@@ -23,12 +23,12 @@ public class DBConnection {
         try {
             Class.forName(DRIVER);
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("✓ 데이터베이스 연결 성공");
+            System.out.println("데이터베이스 연결 성공");
         } catch (ClassNotFoundException e) {
-            System.err.println("✗ JDBC 드라이버를 찾을 수 없습니다: " + e.getMessage());
+            System.err.println("JDBC 드라이버를 찾을 수 없습니다: " + e.getMessage());
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            System.err.println("✗ 데이터베이스 연결 실패: " + e.getMessage());
+            System.err.println("데이터베이스 연결 실패: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -51,10 +51,10 @@ public class DBConnection {
             // 연결이 끊어졌으면 재연결
             if (connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("✓ 데이터베이스 재연결 성공");
+                System.out.println("데이터베이스 재연결 성공");
             }
         } catch (SQLException e) {
-            System.err.println("✗ 연결 상태 확인 실패: " + e.getMessage());
+            System.err.println("연결 상태 확인 실패: " + e.getMessage());
         }
         return connection;
     }
@@ -68,7 +68,7 @@ public class DBConnection {
                 try {
                     resource.close();
                 } catch (Exception e) {
-                    System.err.println("✗ 리소스 종료 실패: " + e.getMessage());
+                    System.err.println("리소스 종료 실패: " + e.getMessage());
                 }
             }
         }
@@ -81,7 +81,7 @@ public class DBConnection {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            System.err.println("✗ 트랜잭션 시작 실패: " + e.getMessage());
+            System.err.println("트랜잭션 시작 실패: " + e.getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ public class DBConnection {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            System.err.println("✗ 커밋 실패: " + e.getMessage());
+            System.err.println("커밋 실패: " + e.getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ public class DBConnection {
             connection.rollback();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            System.err.println("✗ 롤백 실패: " + e.getMessage());
+            System.err.println("롤백 실패: " + e.getMessage());
         }
     }
 
@@ -116,10 +116,10 @@ public class DBConnection {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("✓ 데이터베이스 연결 종료");
+                System.out.println("데이터베이스 연결 종료");
             }
         } catch (SQLException e) {
-            System.err.println("✗ 연결 종료 실패: " + e.getMessage());
+            System.err.println("연결 종료 실패: " + e.getMessage());
         }
     }
 }

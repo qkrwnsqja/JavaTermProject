@@ -18,13 +18,13 @@ public class MiniConnectionPool {
 
     static {
         try {
-            System.out.println("🔥 [Pool] 커넥션 10개 생성 중...");
+            System.out.println("커넥션 생성 중");
             for (int i = 0; i < 10; i++) {
                 Connection conn = DriverManager.getConnection(URL, USER, PASS);
                 conn.setAutoCommit(false);
                 connectionQueue.offer(conn);
             }
-            System.out.println("✅ [Pool] 준비 완료!");
+            System.out.println("준비 완료!");
         } catch (Exception e) { e.printStackTrace(); }
     }
 

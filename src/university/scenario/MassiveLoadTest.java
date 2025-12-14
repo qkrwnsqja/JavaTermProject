@@ -18,7 +18,7 @@ public class MassiveLoadTest {
     private static final AtomicInteger errorCount = new AtomicInteger(0); // DB 연결 에러 카운트
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("=== [시나리오 9] 1,000명 대규모 부하 테스트 (Connection 안정화 버전) ===");
+        System.out.println("=== 1,000명 대규모 부하 테스트 (Connection 안정화 버전) ===");
         System.out.println("대상: 99999번 강의 (정원 30명)");
         System.out.println("참가자: 1,000명 (20250001 ~ 20251000)");
         System.out.println("전략: 랜덤 딜레이(0~300ms)를 주어 리스너 폭주(ORA-12541) 방지");
@@ -42,7 +42,7 @@ public class MassiveLoadTest {
                     readyLatch.countDown(); // 준비 완료 알림
                     startLatch.await(); // 시작 신호 대기
 
-                    // [핵심 수정] 랜덤 딜레이 추가 (0 ~ 300ms)
+                    // 랜덤 딜레이 추가 (0 ~ 300ms)
                     // 1000명이 0.001초 만에 동시에 Socket을 열면 OS/DB가 거부하므로,
                     // 아주 미세하게 분산시켜 연결 안정성을 확보합니다.
                     long sleepTime = (long) (Math.random() * 300);
@@ -71,7 +71,7 @@ public class MassiveLoadTest {
         }
 
         readyLatch.await();
-        System.out.println("1,000명 준비 완료. 3초 후 진입 시작...");
+        System.out.println("1,000명 준비 완료. 3초 후 진입 시작");
         Thread.sleep(3000);
 
         System.out.println("대규모 접속 시작!");

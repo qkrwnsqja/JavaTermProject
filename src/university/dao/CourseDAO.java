@@ -42,11 +42,11 @@ public class CourseDAO {
             pstmt.setString(7, course.getIsDeleted() != null ? course.getIsDeleted() : "N");
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 과목 등록 성공: " + course.getCourseNameKr());
+            System.out.println("과목 등록 성공: " + course.getCourseNameKr());
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 등록 실패: " + e.getMessage());
+            System.err.println("과목 등록 실패: " + e.getMessage());
             return false;
         }
     }
@@ -66,7 +66,7 @@ public class CourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 조회 실패: " + e.getMessage());
+            System.err.println("과목 조회 실패: " + e.getMessage());
         }
         return null;
     }
@@ -86,7 +86,7 @@ public class CourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 목록 조회 실패: " + e.getMessage());
+            System.err.println("과목 목록 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -106,7 +106,7 @@ public class CourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 목록 조회 실패: " + e.getMessage());
+            System.err.println("과목 목록 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -128,7 +128,7 @@ public class CourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 구분별 조회 실패: " + e.getMessage());
+            System.err.println("과목 구분별 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -152,7 +152,7 @@ public class CourseDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 검색 실패: " + e.getMessage());
+            System.err.println("과목 검색 실패: " + e.getMessage());
         }
         return list;
     }
@@ -181,11 +181,11 @@ public class CourseDAO {
             pstmt.setString(7, course.getCourseCode());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 과목 정보 수정 성공: " + course.getCourseNameKr());
+            System.out.println("과목 정보 수정 성공: " + course.getCourseNameKr());
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 정보 수정 실패: " + e.getMessage());
+            System.err.println("과목 정보 수정 실패: " + e.getMessage());
             return false;
         }
     }
@@ -200,11 +200,11 @@ public class CourseDAO {
             pstmt.setString(1, courseCode);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 과목 폐지 성공: " + courseCode);
+            System.out.println("과목 폐지 성공: " + courseCode);
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 과목 폐지 실패: " + e.getMessage());
+            System.err.println("과목 폐지 실패: " + e.getMessage());
             return false;
         }
     }

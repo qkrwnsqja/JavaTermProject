@@ -33,11 +33,11 @@ public class DepartmentDAO {
             pstmt.setString(5, department.getOfficePhone());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 학과 등록 성공: " + department.getDeptName());
+            System.out.println("학과 등록 성공: " + department.getDeptName());
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과 등록 실패: " + e.getMessage());
+            System.err.println("학과 등록 실패: " + e.getMessage());
             return false;
         }
     }
@@ -57,7 +57,7 @@ public class DepartmentDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과 조회 실패: " + e.getMessage());
+            System.err.println("학과 조회 실패: " + e.getMessage());
         }
         return null;
     }
@@ -77,7 +77,7 @@ public class DepartmentDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과 목록 조회 실패: " + e.getMessage());
+            System.err.println("학과 목록 조회 실패: " + e.getMessage());
         }
         return list;
     }
@@ -98,7 +98,7 @@ public class DepartmentDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과 검색 실패: " + e.getMessage());
+            System.err.println("학과 검색 실패: " + e.getMessage());
         }
         return list;
     }
@@ -118,11 +118,11 @@ public class DepartmentDAO {
             pstmt.setString(5, department.getDeptCode());
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 학과 정보 수정 성공: " + department.getDeptName());
+            System.out.println("학과 정보 수정 성공: " + department.getDeptName());
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과 정보 수정 실패: " + e.getMessage());
+            System.err.println("학과 정보 수정 실패: " + e.getMessage());
             return false;
         }
     }
@@ -137,11 +137,11 @@ public class DepartmentDAO {
             pstmt.setString(1, deptCode);
 
             int result = pstmt.executeUpdate();
-            System.out.println("✓ 학과 삭제 성공: " + deptCode);
+            System.out.println("학과 삭제 성공: " + deptCode);
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("✗ 학과 삭제 실패: " + e.getMessage());
+            System.err.println("학과 삭제 실패: " + e.getMessage());
             return false;
         }
     }

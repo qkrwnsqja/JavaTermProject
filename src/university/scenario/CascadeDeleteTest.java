@@ -8,13 +8,13 @@ import java.sql.ResultSet;
 public class CascadeDeleteTest {
 
     public static void main(String[] args) {
-        System.out.println("=== [시나리오 5 & 6] 참조 무결성 및 CASCADE 삭제 테스트 ===");
+        System.out.println("===  참조 무결성 및 CASCADE 삭제 테스트 ===");
 
         Connection conn = DBConnection.getInstance().getConnection();
 
         try {
-            // 1. [시나리오 5] 교수 삭제 -> 개설 강좌 삭제 확인
-            System.out.println("\n[Test 1] 교수(PROF001) 삭제 시도...");
+            // 1. 교수 삭제 -> 개설 강좌 삭제 확인
+            System.out.println("\n[Test 1] 교수(PROF001) 삭제 시도");
             System.out.println("   -> 예상: 해당 교수의 강의(99999)와 수강신청 내역이 같이 삭제되거나, 에러 발생");
 
             String checkCourseSql = "SELECT count(*) FROM open_course WHERE professor_id = 'PROF001'";
@@ -31,8 +31,8 @@ public class CascadeDeleteTest {
                 System.out.println("      (이유: FK 제약조건에 ON DELETE CASCADE가 없어서 자식 데이터 보호됨)");
             }
 
-            // 2. [시나리오 6] 학과 삭제 -> 학생/교수 삭제 확인
-            System.out.println("\n[Test 2] 학과(CS) 삭제 시도...");
+            // 2. 학과 삭제 -> 학생/교수 삭제 확인
+            System.out.println("\n[Test 2] 학과(CS) 삭제 시도");
             System.out.println("   -> 예상: CS학과의 모든 학생, 교수, 강의가 사라져야 함");
 
             String checkStudentSql = "SELECT count(*) FROM student WHERE dept_code = 'CS'";

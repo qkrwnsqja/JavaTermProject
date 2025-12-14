@@ -1,4 +1,4 @@
-package university.scenario; // ⚠️ 패키지 위치가 scenario라면 이걸 쓰세요. (util이라면 util로 변경)
+package university.scenario;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

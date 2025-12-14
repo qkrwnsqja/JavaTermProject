@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * [시나리오 11] Trigger 순서 및 일관성 검증
+ * Trigger 순서 및 일관성 검증
  */
 public class TriggerConsistencyTest {
 
@@ -17,7 +17,7 @@ public class TriggerConsistencyTest {
 
     public static void main(String[] args) {
         System.out.println("=================================================================");
-        System.out.println("   [시나리오 11] Trigger 순서 및 일관성 검증");
+        System.out.println(" Trigger 순서 및 일관성 검증");
         System.out.println("=================================================================\n");
 
         Connection conn = null;
@@ -34,9 +34,9 @@ public class TriggerConsistencyTest {
             List<String> triggers = getTriggers(conn);
 
             if (triggers.isEmpty()) {
-                System.out.println("  ⚠️ Trigger가 없습니다!");
+                System.out.println("  Trigger가 없습니다!");
             } else {
-                System.out.println("  ✅ 발견된 Trigger:");
+                System.out.println("  발견된 Trigger:");
                 for (String trigger : triggers) {
                     System.out.println("     - " + trigger);
                 }
@@ -44,7 +44,7 @@ public class TriggerConsistencyTest {
 
             // Step 2: 초기 상태 확인
             System.out.println("\n-----------------------------------------------------------------");
-            System.out.println("\nStep 2: 초기 상태 확인...\n");
+            System.out.println("\nStep 2: 초기 상태 확인\n");
 
             int initialCount = getEnrolledCount(conn, COURSE_ID);
             int capacity = getCapacity(conn, COURSE_ID);
@@ -54,7 +54,7 @@ public class TriggerConsistencyTest {
 
             // Step 3: 학생 5명 신청
             System.out.println("\n-----------------------------------------------------------------");
-            System.out.println("\nStep 3: 학생 5명 신청 (정원 내)...\n");
+            System.out.println("\nStep 3: 학생 5명 신청 (정원 내)\n");
 
             for (int i = 0; i < 5; i++) {
                 insertEnrollment(conn, STUDENTS[i], COURSE_ID);
@@ -63,38 +63,38 @@ public class TriggerConsistencyTest {
             }
 
             conn.commit();
-            System.out.println("\n  ✅ 5명 신청 완료");
+            System.out.println("\n  5명 신청 완료");
 
             int afterInsertCount = getEnrolledCount(conn, COURSE_ID);
 
             // Step 4: 정원 초과 신청 시도
             System.out.println("\n-----------------------------------------------------------------");
-            System.out.println("\nStep 4: 정원 초과 신청 시도 (6번째 학생)...\n");
+            System.out.println("\nStep 4: 정원 초과 신청 시도 (6번째 학생)\n");
 
             int beforeOverCount = getEnrolledCount(conn, COURSE_ID);
-            System.out.println("  6번째 학생 " + STUDENTS[5] + " 신청 시도...");
+            System.out.println("  6번째 학생 " + STUDENTS[5] + " 신청 시도");
 
             boolean overSuccess = false;
             try {
                 insertEnrollment(conn, STUDENTS[5], COURSE_ID);
                 conn.commit();
                 overSuccess = true;
-                System.out.println("\n  ❌ [FAIL] 정원 초과인데 신청되었습니다!");
+                System.out.println("\n  [FAIL] 정원 초과인데 신청되었습니다!");
             } catch (SQLException e) {
                 conn.rollback();
-                System.out.println("\n  ✅ [PASS] Trigger에서 에러 발생!");
+                System.out.println("\n  [PASS] Trigger에서 에러 발생!");
             }
 
             int afterOverCount = getEnrolledCount(conn, COURSE_ID);
 
             // Step 5: 수강 취소 테스트
             System.out.println("\n-----------------------------------------------------------------");
-            System.out.println("\nStep 5: 수강 취소 테스트...\n");
+            System.out.println("\nStep 5: 수강 취소 테스트\n");
 
             Integer enrollmentId = getEnrollmentId(conn, STUDENTS[0], COURSE_ID);
 
             if (enrollmentId != null) {
-                System.out.println("  학생 " + STUDENTS[0] + " 수강 취소...");
+                System.out.println("  학생 " + STUDENTS[0] + " 수강 취소");
 
                 int beforeDelete = getEnrolledCount(conn, COURSE_ID);
                 deleteEnrollment(conn, enrollmentId);
@@ -105,9 +105,9 @@ public class TriggerConsistencyTest {
                 System.out.println("  취소 후: " + afterDelete + "명");
 
                 if (afterDelete == beforeDelete - 1) {
-                    System.out.println("\n  ✅ [PASS] Trigger가 enrolled_count를 자동 감소!");
+                    System.out.println("\n  [PASS] Trigger가 enrolled_count를 자동 감소!");
                 } else {
-                    System.out.println("\n  ❌ [FAIL] enrolled_count가 감소하지 않음!");
+                    System.out.println("\n  [FAIL] enrolled_count가 감소하지 않음!");
                 }
             }
 
@@ -131,9 +131,9 @@ public class TriggerConsistencyTest {
             System.out.println("정원 체크: " + (capacityCheckWorks ? "✅" : "❌"));
 
             if (insertTriggerWorks && deleteTriggerWorks && capacityCheckWorks) {
-                System.out.println("\n✅ [PASS] 모든 Trigger가 올바르게 작동합니다!");
+                System.out.println("\n [PASS] 모든 Trigger가 올바르게 작동합니다!");
             } else {
-                System.out.println("\n❌ [FAIL] 일부 Trigger가 제대로 작동하지 않습니다!");
+                System.out.println("\n [FAIL] 일부 Trigger가 제대로 작동하지 않습니다!");
             }
 
             System.out.println("=================================================================\n");

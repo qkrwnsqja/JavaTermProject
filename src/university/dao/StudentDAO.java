@@ -1,7 +1,7 @@
 package university.dao;
 
 import university.config.DBConnection;
-import university.config.MiniConnectionPool; // ★ 커넥션 풀 임포트
+import university.config.MiniConnectionPool; // 커넥션 풀 임포트
 import university.model.Student;
 
 import java.sql.*;
@@ -30,7 +30,7 @@ public class StudentDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            conn = MiniConnectionPool.getConnection(); // ★ 풀에서 대여
+            conn = MiniConnectionPool.getConnection(); // 풀에서 대여
             pstmt = conn.prepareStatement(sql);
 
             pstmt.setString(1, student.getStudentId());
@@ -48,11 +48,11 @@ public class StudentDAO {
             pstmt.setString(12, student.getEmail());
 
             int result = pstmt.executeUpdate();
-            // System.out.println("✓ 학생 등록 성공: " + student.getNameKr());
+            // System.out.println("학생 등록 성공: " + student.getNameKr());
             return result > 0;
 
         } catch (Exception e) {
-            System.err.println("✗ 학생 등록 실패: " + e.getMessage());
+            System.err.println("학생 등록 실패: " + e.getMessage());
             return false;
         } finally {
             DBConnection.close(null, pstmt, null);
@@ -81,7 +81,7 @@ public class StudentDAO {
                 return mapResultSetToStudent(rs);
             }
         } catch (Exception e) {
-            System.err.println("✗ 학생 조회 실패: " + e.getMessage());
+            System.err.println("학생 조회 실패: " + e.getMessage());
         } finally {
             DBConnection.close(rs, pstmt, null);
             MiniConnectionPool.releaseConnection(conn);
@@ -110,7 +110,7 @@ public class StudentDAO {
                 list.add(mapResultSetToStudent(rs));
             }
         } catch (Exception e) {
-            System.err.println("✗ 학생 목록 조회 실패: " + e.getMessage());
+            System.err.println("학생 목록 조회 실패: " + e.getMessage());
         } finally {
             DBConnection.close(rs, pstmt, null);
             MiniConnectionPool.releaseConnection(conn);
@@ -127,7 +127,7 @@ public class StudentDAO {
         ResultSet rs = null;
         List<Student> list = new ArrayList<>();
 
-        // OR 1=1 공격 등을 막기 위해 반드시 ?(Placeholder) 사용
+        // (Placeholder) 사용
         String sql = "SELECT s.*, d.dept_name FROM student s " +
                 "LEFT JOIN department d ON s.dept_code = d.dept_code " +
                 "WHERE s.name_kr LIKE ? OR s.name_en LIKE ? " +
@@ -149,7 +149,7 @@ public class StudentDAO {
             }
 
         } catch (Exception e) {
-            System.err.println("✗ 학생 검색 실패: " + e.getMessage());
+            System.err.println("학생 검색 실패: " + e.getMessage());
         } finally {
             DBConnection.close(rs, pstmt, null);
             MiniConnectionPool.releaseConnection(conn);
@@ -188,7 +188,7 @@ public class StudentDAO {
             int result = pstmt.executeUpdate();
             return result > 0;
         } catch (Exception e) {
-            System.err.println("✗ 학생 정보 수정 실패: " + e.getMessage());
+            System.err.println("학생 정보 수정 실패: " + e.getMessage());
             return false;
         } finally {
             DBConnection.close(null, pstmt, null);
@@ -212,7 +212,7 @@ public class StudentDAO {
             int result = pstmt.executeUpdate();
             return result > 0;
         } catch (Exception e) {
-            System.err.println("✗ 학생 삭제 실패: " + e.getMessage());
+            System.err.println("학생 삭제 실패: " + e.getMessage());
             return false;
         } finally {
             DBConnection.close(null, pstmt, null);

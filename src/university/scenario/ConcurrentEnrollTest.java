@@ -18,7 +18,7 @@ public class ConcurrentEnrollTest {
     private static final AtomicInteger failCount = new AtomicInteger(0);
 
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("=== [시나리오 1] 동시성 폭격 테스트 시작 (With Pessimistic Lock) ===");
+        System.out.println("===  동시성 테스트 시작 (With Pessimistic Lock) ===");
         System.out.println("대상 강의 ID: " + TARGET_COURSE_ID + " (정원 30명)");
         System.out.println("참가 학생 수: " + THREAD_COUNT + "명 (20250001 ~ 20250100)");
         System.out.println("---------------------------------------------");
@@ -28,7 +28,7 @@ public class ConcurrentEnrollTest {
 
         // 동시성 제어를 위한 Latch 설정
         CountDownLatch readyLatch = new CountDownLatch(THREAD_COUNT); // 모든 스레드 준비 확인용
-        CountDownLatch startLatch = new CountDownLatch(1); // 동시 시작 신호용 (총성)
+        CountDownLatch startLatch = new CountDownLatch(1); // 동시 시작 신호용
         CountDownLatch doneLatch = new CountDownLatch(THREAD_COUNT); // 모든 작업 종료 확인용
 
         EnrollmentDAO dao = new EnrollmentDAO();
@@ -69,11 +69,11 @@ public class ConcurrentEnrollTest {
 
         // 메인 스레드: 모든 스레드가 준비될 때까지 대기
         readyLatch.await();
-        System.out.println("모든 스레드 준비 완료. 3초 후 폭격 시작...");
+        System.out.println("모든 스레드 준비 완료. 3초 후 시작");
         Thread.sleep(3000);
 
-        System.out.println("폭격 시작! (Lock 적용됨)");
-        startLatch.countDown(); // 땅! (100개 스레드 동시 진입)
+        System.out.println("시작! (Lock 적용됨)");
+        startLatch.countDown(); // (100개 스레드 동시 진입)
 
         // 모든 스레드가 끝날 때까지 대기
         doneLatch.await();

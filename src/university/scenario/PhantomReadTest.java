@@ -6,25 +6,25 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * [시나리오 15] Phantom Read 검증 테스트
- *
+ *  Phantom Read 검증 테스트
+
  * 목적:
  * - 같은 트랜잭션 내에서 동일한 쿼리를 2번 실행할 때
  * - 다른 트랜잭션이 중간에 데이터를 INSERT하면
  * - 두 번째 조회에서 새로운 행이 나타나는지 확인
- *
+
  * Phantom Read란?
  * - 트랜잭션 A가 조회 → 트랜잭션 B가 INSERT → 트랜잭션 A가 재조회
  * - 첫 번째 조회에는 없던 행이 두 번째 조회에 나타남 (유령처럼!)
- *
+
  * Oracle 격리 수준:
  * - READ COMMITTED (기본): Phantom Read 발생 가능
  * - SERIALIZABLE: Phantom Read 방지
- *
+
  * 실행 전 준비:
  * 1. test_setup.sql 실행 완료
  * 2. COURSE_ID를 TEST_LEAK의 open_course_id로 설정
- *
+
  * 예상 결과:
  * - READ COMMITTED: 두 번째 조회에서 추가된 행이 보임
  * - SERIALIZABLE: 두 번째 조회에서도 동일한 결과
@@ -43,7 +43,7 @@ public class PhantomReadTest {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("=================================================================");
-        System.out.println("   [시나리오 15] Phantom Read 검증 테스트");
+        System.out.println(" Phantom Read 검증 테스트");
         System.out.println("=================================================================");
         System.out.println("목표: 트랜잭션 격리 수준에 따른 Phantom Read 발생 여부 확인");
         System.out.println("-----------------------------------------------------------------");
@@ -117,13 +117,13 @@ public class PhantomReadTest {
                 readerFirstDone.countDown();
 
                 // Writer가 INSERT할 때까지 대기
-                System.out.println("\n[Reader] Step 2: Writer가 데이터 추가할 때까지 대기...");
+                System.out.println("\n[Reader] Step 2: Writer가 데이터 추가할 때까지 대기");
                 writerDone.await();
 
                 Thread.sleep(500); // 약간의 대기
 
                 // === 두 번째 조회 (같은 트랜잭션) ===
-                System.out.println("\n[Reader] Step 3: 두 번째 조회 시작 (같은 트랜잭션)...");
+                System.out.println("\n[Reader] Step 3: 두 번째 조회 시작 (같은 트랜잭션)");
 
                 pstmt = conn.prepareStatement(sql);
                 pstmt.setInt(1, COURSE_ID);
@@ -145,7 +145,7 @@ public class PhantomReadTest {
                 // Phantom Read 감지
                 if (secondCount > firstCount) {
                     phantomDetected = true;
-                    System.err.println("\n🔴 [Reader] PHANTOM READ 감지!");
+                    System.err.println("\n[Reader] PHANTOM READ 감지!");
                     System.err.println("   첫 번째: " + firstCount + "명");
                     System.err.println("   두 번째: " + secondCount + "명");
                     System.err.println("   차이: +" + (secondCount - firstCount) + "명 (유령 행!)");
@@ -199,7 +199,7 @@ public class PhantomReadTest {
                 conn.setAutoCommit(false);
 
                 // 새로운 학생 3명 추가
-                System.out.println("\n[Writer] Step 1: 새로운 학생 3명 추가 중...");
+                System.out.println("\n[Writer] Step 1: 새로운 학생 3명 추가 중");
 
                 String sql = "INSERT INTO enrollment " +
                         "(enrollment_id, student_id, open_course_id, " +
@@ -239,10 +239,10 @@ public class PhantomReadTest {
         readerThread.start();
         writerThread.start();
 
-        System.out.println("두 스레드 준비 완료. 3초 후 시작...\n");
+        System.out.println("두 스레드 준비 완료. 3초 후 시작\n");
         Thread.sleep(3000);
 
-        System.out.println("▶▶▶ 테스트 시작! ◀◀◀\n");
+        System.out.println(" 테스트 시작! \n");
         startLatch.countDown();
 
         doneLatch.await();
@@ -257,13 +257,13 @@ public class PhantomReadTest {
         System.out.println("-----------------------------------------------------------------");
 
         if (phantomDetected) {
-            System.out.println("✅ [PASS] Phantom Read가 발생했습니다!");
+            System.out.println("[PASS] Phantom Read가 발생했습니다!");
             System.out.println("   READ COMMITTED 격리 수준에서는 정상적인 동작입니다.");
-            System.out.println("\n💡 Phantom Read란?");
+            System.out.println("\nPhantom Read란?");
             System.out.println("   - 같은 트랜잭션 내에서 같은 쿼리를 2번 실행");
             System.out.println("   - 다른 트랜잭션이 중간에 INSERT");
             System.out.println("   - 두 번째 조회에 없던 행이 나타남 (유령!)");
-            System.out.println("\n💡 해결 방법:");
+            System.out.println("\n해결 방법:");
             System.out.println("   1. SERIALIZABLE 격리 수준 사용");
             System.out.println("      conn.setTransactionIsolation(");
             System.out.println("          Connection.TRANSACTION_SERIALIZABLE);");
@@ -275,7 +275,7 @@ public class PhantomReadTest {
             System.out.println("      - Snapshot Isolation");
             System.out.println("      - Optimistic Locking");
         } else {
-            System.out.println("❌ [FAIL] Phantom Read가 발생하지 않았습니다.");
+            System.out.println("[FAIL] Phantom Read가 발생하지 않았습니다.");
             System.out.println("   → Writer가 제대로 INSERT했는지 확인하세요.");
             System.out.println("   → 또는 격리 수준이 SERIALIZABLE일 수 있습니다.");
         }
@@ -283,7 +283,7 @@ public class PhantomReadTest {
         System.out.println("=================================================================\n");
 
         // 추가 테스트: SERIALIZABLE 격리 수준
-        System.out.println("💡 추가 정보: SERIALIZABLE 격리 수준으로 재테스트하려면");
+        System.out.println("추가 정보: SERIALIZABLE 격리 수준으로 재테스트하려면");
         System.out.println("   Reader의 격리 수준을 변경하세요:");
         System.out.println("   conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);");
     }
